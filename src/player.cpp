@@ -2,6 +2,8 @@
 
 #include <QBrush>
 
+#include<QMessageBox>
+
 Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
   setRect(0, 0, 30, 60);
@@ -38,6 +40,10 @@ for(auto item : items){
     velocityY = 0;
     onGround = true;
   }
+}
+if (y() > 400) {
+QMessageBox::information(nullptr, "YOU LOST HUMAN", "BUBAY");
+
 }
 
 }
