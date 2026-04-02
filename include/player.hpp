@@ -12,7 +12,7 @@ class Player : public QObject, public QGraphicsRectItem {
   Player(QGraphicsItem* parent = nullptr);
 
  public slots:
-  void updateState(QGraphicsView &view);
+  void updateState();
 
  protected:
   void keyPressEvent(QKeyEvent* event) override;

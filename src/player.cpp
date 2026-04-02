@@ -26,7 +26,7 @@ void Player::keyPressEvent(QKeyEvent* event) {
   }
 }
 
-void Player::updateState(QGraphicsView& view) {
+void Player::updateState() {
   velocityY += 1;
   onGround = false;
   moveBy(0, velocityY);
@@ -40,7 +40,7 @@ void Player::updateState(QGraphicsView& view) {
     velocityY = 0;
     onGround = true;
   }
-  view.centerOn(this);
+  this->scene()->views().first()->centerOn(this);
   if (y() > 400) {
     auto msgBox = new QMessageBox;
     msgBox->setWindowTitle("Game Over");
