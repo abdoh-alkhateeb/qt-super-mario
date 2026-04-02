@@ -6,7 +6,7 @@
 
 Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
-  setPixmap(QPixmap("assets/player.png"));
+  setPixmap(QPixmap("../assets/player.png")); // assuming built binary is in ./build probbly should replace with proper resources later on
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
