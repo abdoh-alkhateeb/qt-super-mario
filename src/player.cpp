@@ -1,5 +1,7 @@
 #include "player.hpp"
-
+#include <iostream>
+#include <QGraphicsView>
+#include <QMessageBox>
 #include <QBrush>
 
 Player::Player(QGraphicsItem* parent)
@@ -36,5 +38,12 @@ void Player::updateState() {
 
     velocityY = 0;
     onGround = true;
+  }
+  this->scene()->views().first()->centerOn(this);
+  if (y() > 400) {
+    auto msgBox = new QMessageBox;
+    msgBox->setWindowTitle("Game Over");
+    msgBox->setText("You have lost");
+    msgBox->exec();
   }
 }
