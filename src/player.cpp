@@ -1,5 +1,7 @@
 #include "player.hpp"
-
+#include <iostream>
+#include <QGraphicsView>
+#include <QMessageBox>
 #include <QBrush>
 
 Player::Player(QGraphicsItem* parent)
@@ -24,7 +26,7 @@ void Player::keyPressEvent(QKeyEvent* event) {
   }
 }
 
-void Player::updateState() {
+void Player::updateState(QGraphicsView& view) {
   velocityY += 1;
   onGround = false;
   moveBy(0, velocityY);
@@ -37,5 +39,12 @@ void Player::updateState() {
 
     velocityY = 0;
     onGround = true;
+  }
+  view.centerOn(this);
+  if (y() > 400) {
+    auto msgBox = new QMessageBox;
+    msgBox->setWindowTitle("Game Over");
+    msgBox->setText("You have lost");
+    msgBox->exec();
   }
 }

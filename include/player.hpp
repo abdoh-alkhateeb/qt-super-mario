@@ -2,6 +2,7 @@
 
 #include <QGraphicsRectItem>
 #include <QKeyEvent>
+#include <QGraphicsView>
 #include <QObject>
 
 class Player : public QObject, public QGraphicsRectItem {
@@ -11,7 +12,7 @@ class Player : public QObject, public QGraphicsRectItem {
   Player(QGraphicsItem* parent = nullptr);
 
  public slots:
-  void updateState();
+  void updateState(QGraphicsView &view);
 
  protected:
   void keyPressEvent(QKeyEvent* event) override;

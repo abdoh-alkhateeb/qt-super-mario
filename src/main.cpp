@@ -35,11 +35,7 @@ int main(int argc, char* argv[]) {
   view.show();
 
   QTimer timer;
-  QObject::connect(&timer, &QTimer::timeout, [&]() {
-    player.updateState();
-    view.centerOn(&player);
-  });
-
+  QObject::connect(&timer, &QTimer::timeout, [&]() { player.updateState(view); });
   timer.start(33);
 
   return app.exec();
