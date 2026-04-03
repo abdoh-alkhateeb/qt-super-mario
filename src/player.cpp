@@ -1,11 +1,12 @@
 #include "player.hpp"
-
+#include <iostream>
+#include <QGraphicsView>
+#include <QMessageBox>
 #include <QBrush>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
+  setPixmap(QPixmap("../assets/player.png")); // assuming built binary is in ./build probbly should replace with proper resources later on
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
@@ -37,5 +38,12 @@ void Player::updateState() {
 
     velocityY = 0;
     onGround = true;
+  }
+  this->scene()->views().first()->centerOn(this);
+  if (y() > 400) {
+    auto msgBox = new QMessageBox;
+    msgBox->setWindowTitle("Game Over");
+    msgBox->setText("You have lost");
+    msgBox->exec();
   }
 }

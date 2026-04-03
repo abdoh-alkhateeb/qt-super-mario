@@ -2,6 +2,7 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <vector>
 #include <QTimer>
 
 #include "player.hpp"
@@ -10,16 +11,23 @@ int main(int argc, char* argv[]) {
   QApplication app(argc, argv);
 
   QGraphicsScene scene;
-  scene.setSceneRect(0, 0, 600, 400);
+  scene.setSceneRect(0, 0, 6000, 400);
   scene.setBackgroundBrush(QColor(135, 205, 235));
 
   Player player;
   scene.addItem(&player);
 
-  QGraphicsRectItem ground(0, 0, 300, 30);
-  ground.setBrush(Qt::darkGreen);
-  ground.setPos(100, 250);
-  scene.addItem(&ground);
+  std::vector<QGraphicsRectItem*> platforms = {
+    new QGraphicsRectItem(0, 0, 300, 30),
+    new QGraphicsRectItem(360, 0, 300, 30),
+    new QGraphicsRectItem(700, 0, 300, 30)
+  };
+
+  for (auto platform : platforms) {
+    platform->setBrush(Qt::darkGreen);
+    platform->setPos(100, 250);
+    scene.addItem(platform);
+  }
 
   QGraphicsView view(&scene);
   view.setWindowTitle("Qt Super Mario");
