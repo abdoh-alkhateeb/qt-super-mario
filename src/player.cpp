@@ -1,6 +1,7 @@
 #include "player.hpp"
 #include <QKeyEvent>
 #include <QBrush>
+#include <QMessageBox>
 
 Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
@@ -38,5 +39,9 @@ void Player::updateState() {
         setY(item->y() - boundingRect().height());
         velocityY = 0;
         onGround = true;
+    }
+
+    if (y() > 400) {
+        QMessageBox::information(nullptr, "Game Over", "You lost!");
     }
 }
