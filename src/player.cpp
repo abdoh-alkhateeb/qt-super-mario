@@ -1,11 +1,13 @@
 #include "player.hpp"
-
+#include <QMessageBox>
 #include <QBrush>
+#include <QGraphicsScene>
+#include <QApplication>
+
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
+  setPixmap(QPixmap("assets/player.png"));
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
@@ -38,4 +40,12 @@ void Player::updateState() {
     velocityY = 0;
     onGround = true;
   }
+  if (this->y() > scene()->height()) {
+      QMessageBox* GameOver = new QMessageBox;
+      GameOver->setWindowTitle("Game Over");
+      GameOver->setText("You Lost!");
+      GameOver->exec();
+      QApplication::quit();
+  }
 }
+
