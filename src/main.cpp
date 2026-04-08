@@ -18,13 +18,23 @@ int main(int argc, char* argv[]) {
 
   QGraphicsRectItem ground(0, 0, 300, 30);
   ground.setBrush(Qt::darkGreen);
-  ground.setPos(100, 250);
+  ground.setPos(-400, 250);
   scene.addItem(&ground);
+  
+  QGraphicsRectItem ground2(0, 0, 300, 30);
+  ground2.setBrush(Qt::darkGreen);
+  ground2.setPos(150, 250);
+  scene.addItem(&ground2);
+
+  QGraphicsRectItem ground3(0, 0, 300, 30);
+  ground3.setBrush(Qt::darkGreen);
+  ground3.setPos(700, 250);
+  scene.addItem(&ground3);
 
   QGraphicsView view(&scene);
   view.setWindowTitle("Qt Super Mario");
   view.resize(640, 480);
-  view.show();
+  view.showMaximized();
 
   QTimer timer;
   QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
