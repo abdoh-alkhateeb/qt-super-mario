@@ -1,12 +1,17 @@
 #include "player.hpp"
 
-#include <QBrush>
+#include <QGraphicsScene>
+#include <QMessageBox>
+#include <QPixmap>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
-  setPos(300, 0);
+    : QObject(),
+      QGraphicsPixmapItem(parent),
+      velocityY(0),
+      onGround(false),
+      spawnPos(300, 0) {
+  setPixmap(QPixmap("assets/player.png"));
+  setPos(spawnPos);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
   setFocus();
@@ -29,13 +34,42 @@ void Player::updateState() {
   onGround = false;
   moveBy(0, velocityY);
 
-  QList<QGraphicsItem*> items = collidingItems();
-
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
-
+  if (scene() && y() > scene()->sceneRect().bottom()) {
     velocityY = 0;
-    onGround = true;
+    setPos(spawnPos);
+    QMessageBox::information(nullptr, "Game Over", "You lost!");
+    return;
+  }
+
+  const QList<QGraphicsItem*> items = collidingItems();
+  if (items.isEmpty()) {
+    return;
+  }
+
+  if (velocityY >= 0) {
+    const QRectF playerRect = sceneBoundingRect();
+    const QRectF previousRect = playerRect.translated(0, -velocityY);
+    const qreal playerHeight = boundingRect().height();
+    const qreal previousBottom = previousRect.bottom();
+    const qreal currentBottom = playerRect.bottom();
+
+    bool landed = false;
+    qreal bestTop = 0;
+
+    for (QGraphicsItem* item : items) {
+      const QRectF itemRect = item->sceneBoundingRect();
+      if (previousBottom <= itemRect.top() && currentBottom >= itemRect.top()) {
+        if (!landed || itemRect.top() < bestTop) {
+          bestTop = itemRect.top();
+          landed = true;
+        }
+      }
+    }
+
+    if (landed) {
+      setY(bestTop - playerHeight);
+      velocityY = 0;
+      onGround = true;
+    }
   }
 }
