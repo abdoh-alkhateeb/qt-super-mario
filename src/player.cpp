@@ -29,13 +29,35 @@ void Player::updateState() {
   onGround = false;
   moveBy(0, velocityY);
 
-  QList<QGraphicsItem*> items = collidingItems();
+  const QList<QGraphicsItem*> items = collidingItems();
+  if (items.isEmpty()) {
+    return;
+  }
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
+  if (velocityY >= 0) {
+    const QRectF playerRect = sceneBoundingRect();
+    const QRectF previousRect = playerRect.translated(0, -velocityY);
+    const qreal playerHeight = boundingRect().height();
+    const qreal previousBottom = previousRect.bottom();
+    const qreal currentBottom = playerRect.bottom();
 
-    velocityY = 0;
-    onGround = true;
+    bool landed = false;
+    qreal bestTop = 0;
+
+    for (QGraphicsItem* item : items) {
+      const QRectF itemRect = item->sceneBoundingRect();
+      if (previousBottom <= itemRect.top() && currentBottom >= itemRect.top()) {
+        if (!landed || itemRect.top() < bestTop) {
+          bestTop = itemRect.top();
+          landed = true;
+        }
+      }
+    }
+
+    if (landed) {
+      setY(bestTop - playerHeight);
+      velocityY = 0;
+      onGround = true;
+    }
   }
 }
