@@ -20,6 +20,9 @@ int main(int argc, char* argv[]) {
     ground.setBrush(Qt::darkGreen);
     ground.setPos(100, 250);
     scene.addItem(&ground);
+  QGraphicsScene scene;
+  scene.setSceneRect(0, 0, 2000, 400);
+  scene.setBackgroundBrush(QColor(135, 205, 235));
 
     QGraphicsRectItem platform1(0, 0, 120, 20);
     platform1.setBrush(Qt::darkGreen);
@@ -31,14 +34,17 @@ int main(int argc, char* argv[]) {
     platform2.setPos(260, 150);
     scene.addItem(&platform2);
 
-    QGraphicsView view(&scene);
-    view.setWindowTitle("Qt Super Mario");
-    view.resize(640, 480);
-    view.show();
+  QGraphicsView view(&scene);
+  view.setWindowTitle("Qt Super Mario");
+  view.setFixedSize(640, 480);
+  view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  view.show();
 
-    QTimer timer;
-    QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
-    timer.start(33);
+  QTimer timer;
+  QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
+  QObject::connect(&timer, &QTimer::timeout,
+                   [&view, &player]() { view.centerOn(&player); });
+  timer.start(33);
 
     return app.exec();
 }
