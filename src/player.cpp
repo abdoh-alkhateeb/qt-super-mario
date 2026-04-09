@@ -4,10 +4,13 @@
 #include <QMessageBox>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-    setRect(0, 0, 30, 60);
-    setBrush(QBrush(Qt::red));
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
+
+    // Set the player image
+    setPixmap(QPixmap("assets/player.png"));
     setPos(300, 0);
+
+    // Make the player focusable
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFocus();
 }
