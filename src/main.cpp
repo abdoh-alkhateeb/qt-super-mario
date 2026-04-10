@@ -23,12 +23,12 @@ int main(int argc, char* argv[]) {
 
   QGraphicsRectItem platform1(0, 0, 200, 30);
   platform1.setBrush(Qt::darkGreen);
-  platform1.setPos(300, 180);
+  platform1.setPos(450, 200);
   scene.addItem(&platform1);
 
-  QGraphicsRectItem platform2(0, 0, 100, 30);
+  QGraphicsRectItem platform2(0, 0, 200, 30);
   platform2.setBrush(Qt::darkGreen);
-  platform2.setPos(0, 180);
+  platform2.setPos(700, 150);
   scene.addItem(&platform2);
 
   QGraphicsView view(&scene);
