@@ -42,4 +42,18 @@ for (QGraphicsItem* item : items) {
             break; 
         }
     }
+
+if (this->y() > 400) {
+        
+        velocityY = 0;
+        
+        QMessageBox msgBox;
+        msgBox.setText("You lost, Get Better Loser!");
+        msgBox.setInformativeText("You failed to help your princess Mario GET BETTER!!!!.");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.exec();
+    }
+
+
+
 }

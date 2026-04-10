@@ -3,6 +3,7 @@
 #include <QGraphicsRectItem>
 #include <QKeyEvent>
 #include <QObject>
+#include <QMessageBox>
 
 class Player : public QObject, public QGraphicsRectItem {
   Q_OBJECT
