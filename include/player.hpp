@@ -1,10 +1,11 @@
 #pragma once
 
-#include <QGraphicsRectItem>
+#include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 #include <QObject>
+#include <QTimer>
 
-class Player : public QObject, public QGraphicsRectItem {
+class Player : public QObject, public QGraphicsPixmapItem {
   Q_OBJECT
 
  public:
@@ -12,7 +13,7 @@ class Player : public QObject, public QGraphicsRectItem {
 
  public slots:
   void updateState();
-
+  void end(QTimer&);
  protected:
   void keyPressEvent(QKeyEvent* event) override;
 
