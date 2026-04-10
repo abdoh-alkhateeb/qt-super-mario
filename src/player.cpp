@@ -5,7 +5,7 @@
 Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
   setPixmap(QPixmap("assets/player.png"));
-  setPos(300, 0);
+  setPos(100, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
   setFocus();
