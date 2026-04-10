@@ -7,7 +7,7 @@ Player::Player(QGraphicsItem* parent)
   setRect(0, 0, 30, 60);
   setBrush(Qt::red);
   setPos(300, 0);
-
+ 
   setFlag(QGraphicsItem::ItemIsFocusable);
   setFocus();
 }
