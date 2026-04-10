@@ -25,14 +25,22 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
+
+  // This means that if the player is not touching anything, these 3 lines of code will repeat over and over
+  // Hence, the player will accelerate downwards, giving a gravitational effect.
   velocityY += 1;
   onGround = false;
   moveBy(0, velocityY);
 
+  // List of items the player is colliding with. Can include the platform
   QList<QGraphicsItem*> items = collidingItems();
 
   if (items.size() != 0) {
+
+    // The item is pretty much the ground
     QGraphicsItem* item = items[0];
+
+    // This makes it so that the player lands on the platform. BoundingRect() is the rectangular object encapsulating the player.
     setY(item->y() - boundingRect().height());
 
     velocityY = 0;

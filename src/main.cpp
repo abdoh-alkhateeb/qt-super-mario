@@ -28,7 +28,10 @@ int main(int argc, char* argv[]) {
   view.show();
 
   QTimer timer;
+  // Every 33 ms, the state of the player is updated.
   QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
+
+  // This helps center the player for the user.
   QObject::connect(&timer, &QTimer::timeout,
                    [&view, &player]() { view.centerOn(&player); });
   timer.start(33);
