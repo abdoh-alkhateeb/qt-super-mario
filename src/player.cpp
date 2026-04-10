@@ -1,6 +1,7 @@
 #include "player.hpp"
 #include <QBrush>
 #include <QMessageBox>
+#include <QGraphicsScene>
 
 Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false), gameOver(false) {
