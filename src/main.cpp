@@ -21,14 +21,14 @@ int main(int argc, char* argv[]) {
   ground.setPos(100, 250);
   scene.addItem(&ground);
 
-  QGraphicsRectItem platform1(0, 0, 200, 30);
+  QGraphicsRectItem platform1(0, 0, 140, 30);
   platform1.setBrush(Qt::red);
-  platform1.setPos(300, 210);
+  platform1.setPos(350, 210);
   scene.addItem(&platform1);
 
-  QGraphicsRectItem platform2(0, 0, 250, 30);
+  QGraphicsRectItem platform2(0, 0, 160, 30);
   platform2.setBrush(Qt::red);
-  platform2.setPos(400, 230);
+  platform2.setPos(520, 180);
   scene.addItem(&platform2);
  
   QGraphicsView view(&scene);

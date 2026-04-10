@@ -1,5 +1,5 @@
 #include "player.hpp"
-
+#include <QMessageBox>
 #include <QBrush>
 
 Player::Player(QGraphicsItem* parent)
@@ -40,5 +40,13 @@ void Player::updateState() {
     velocityY = 0;
     onGround = true;
   }
-}
  
+	if(y() +boundingRect().height()>400){
+
+        QMessageBox* messageBox = new QMessageBox;
+        messageBox->setText("You lost!");
+        messageBox->exec();
+        }
+}
+
+
