@@ -1,6 +1,5 @@
 #include "player.hpp"
 #include <QBrush>
-#include <QMessageBox>
 
 Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
@@ -24,25 +23,17 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
-    velocityY += 1;
-    onGround = false;
-    moveBy(0, velocityY);
+  velocityY += 1;
+  onGround = false;
+  moveBy(0, velocityY);
 
-    QList<QGraphicsItem*> items = collidingItems();
+  QList<QGraphicsItem*> items = collidingItems();
 
-    if (items.size() != 0) {
-        QGraphicsItem* item = items[0];
-        setY(item->y() - boundingRect().height());
+  if (items.size() != 0) {
+    QGraphicsItem* item = items[0];
+    setY(item->y() - boundingRect().height());
 
-        velocityY = 0;
-        onGround = true;
-    }
-
-    if (this->y() > 480) {
-        QMessageBox msg;
-        msg.setText("You lost!");
-        msg.exec();
-        setPos(100, 100);
-        velocityY = 0;
-    }
+    velocityY = 0;
+    onGround = true;
+  }
 }
