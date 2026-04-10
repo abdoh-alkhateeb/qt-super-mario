@@ -21,6 +21,19 @@ int main(int argc, char* argv[]) {
   ground.setPos(100, 250);
   scene.addItem(&ground);
 
+  QGraphicsRectItem ground1(0, 0, 300, 30);
+  ground1.setBrush(Qt::darkYellow);
+  ground1.setPos(450, 240);
+  scene.addItem(&ground1);
+
+  QGraphicsRectItem ground2(0, 0, 300, 30);
+  ground2.setBrush(Qt::darkRed);
+  ground2.setPos(800, 230);
+  scene.addItem(&ground2);
+
+
+
+
   QGraphicsView view(&scene);
   view.setWindowTitle("Qt Super Mario");
   view.setFixedSize(640, 480);
