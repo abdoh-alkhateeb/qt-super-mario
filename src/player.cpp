@@ -1,6 +1,4 @@
 #include "player.hpp"
-
-<<<<<<< HEAD
 #include <QBrush>
 #include <QMessageBox>
 
@@ -9,13 +7,6 @@ Player::Player(QGraphicsItem* parent)
   setRect(0, 0, 30, 60);
   setBrush(Qt::red);
   spawnPosition();
-=======
-Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
-  setPixmap(QPixmap("assets/player.png"));
-  setPos(300, 0);
->>>>>>> origin/feature/add-player-image
-
   setFlag(QGraphicsItem::ItemIsFocusable);
   setFocus();
 }
