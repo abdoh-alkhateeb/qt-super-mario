@@ -25,17 +25,21 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
-  velocityY += 1;
+  velocityY += 1.0;
   onGround = false;
   moveBy(0, velocityY);
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
 
-    velocityY = 0;
-    onGround = true;
-  }
+for (QGraphicsItem* item : items) {
+
+
+        if (velocityY > 0 && (y() + boundingRect().height() - velocityY) <= item->y()) {
+            setY(item->y() - boundingRect().height());
+            velocityY = 0;
+            onGround = true;
+            break; 
+        }
+    }
 }
