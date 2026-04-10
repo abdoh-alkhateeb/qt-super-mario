@@ -21,6 +21,7 @@ void Player::keyPressEvent(QKeyEvent* event) {
   }
   if (event->key() == Qt::Key_Space && onGround) {
     velocityY = -15;
+    onGround=false;
   }
 }
 
@@ -31,7 +32,8 @@ void Player::updateState() {
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
+  if (items.size() != 0 && velocityY>=0) {
+
     QGraphicsItem* item = items[0];
     setY(item->y() - boundingRect().height());
 
@@ -39,3 +41,4 @@ void Player::updateState() {
     onGround = true;
   }
 }
+ 
