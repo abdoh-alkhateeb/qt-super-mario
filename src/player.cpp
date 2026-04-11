@@ -1,11 +1,10 @@
 #include "player.hpp"
-
+#include <QMessageBox>
 #include <QBrush>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
+  setPixmap(QPixmap("assets/player.png"));
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
@@ -21,6 +20,7 @@ void Player::keyPressEvent(QKeyEvent* event) {
   }
   if (event->key() == Qt::Key_Space && onGround) {
     velocityY = -15;
+    onGround=false;
   }
 }
 
@@ -31,11 +31,21 @@ void Player::updateState() {
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
+  if (items.size() != 0 && velocityY>=0) {
+
     QGraphicsItem* item = items[0];
     setY(item->y() - boundingRect().height());
 
     velocityY = 0;
     onGround = true;
   }
+ 
+	if(y() +boundingRect().height()>400){
+
+        QMessageBox* messageBox = new QMessageBox;
+        messageBox->setText("You lost!");
+        messageBox->exec();
+        }
 }
+
+
