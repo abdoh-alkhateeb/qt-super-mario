@@ -2,8 +2,9 @@
 
 #include <QBrush>
 
-Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
+Player::Player(QGraphicsItem *parent)
+    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false)
+{
   setRect(0, 0, 30, 60);
   setBrush(Qt::red);
   setPos(300, 0);
@@ -12,27 +13,40 @@ Player::Player(QGraphicsItem* parent)
   setFocus();
 }
 
-void Player::keyPressEvent(QKeyEvent* event) {
-  if (event->key() == Qt::Key_Left) {
-    moveBy(-10, 0);
+void Player::keyPressEvent(QKeyEvent *event)
+{
+  // increased x speed a bit because I could barely make it to next platform
+  if (event->key() == Qt::Key_Left)
+  {
+    moveBy(-15, 0);
   }
-  if (event->key() == Qt::Key_Right) {
-    moveBy(10, 0);
+  if (event->key() == Qt::Key_Right)
+  {
+    moveBy(15, 0);
   }
-  if (event->key() == Qt::Key_Space && onGround) {
+  if (event->key() == Qt::Key_Space && onGround)
+  {
     velocityY = -15;
   }
 }
 
-void Player::updateState() {
+void Player::updateState()
+{
+  if (y() > 400)
+  {
+    emit playerDied();
+    return;
+  }
+
   velocityY += 1;
   onGround = false;
   moveBy(0, velocityY);
 
-  QList<QGraphicsItem*> items = collidingItems();
+  QList<QGraphicsItem *> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
+  if (items.size() != 0)
+  {
+    QGraphicsItem *item = items[0];
     setY(item->y() - boundingRect().height());
 
     velocityY = 0;

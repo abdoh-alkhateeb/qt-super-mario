@@ -4,19 +4,23 @@
 #include <QKeyEvent>
 #include <QObject>
 
-class Player : public QObject, public QGraphicsRectItem {
+class Player : public QObject, public QGraphicsRectItem
+{
   Q_OBJECT
 
- public:
-  Player(QGraphicsItem* parent = nullptr);
+public:
+  Player(QGraphicsItem *parent = nullptr);
 
- public slots:
+public slots:
   void updateState();
 
- protected:
-  void keyPressEvent(QKeyEvent* event) override;
+signals:
+  void playerDied();
 
- private:
+protected:
+  void keyPressEvent(QKeyEvent *event) override;
+
+private:
   int velocityY;
   bool onGround;
 };
