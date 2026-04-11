@@ -30,9 +30,6 @@ void Player::keyReleaseEvent(QKeyEvent* event) {
 
 void Player::updateState() {
 
-  // This means that if the player is not touching anything, these 3 lines of code will repeat over and over
-  // Hence, the player will accelerate downwards, giving a gravitational effect.
-  
     if (isBeingHeld[(int)Direction::Left])
       velocityX = -5;
     else if (isBeingHeld[(int)Direction::Right])
