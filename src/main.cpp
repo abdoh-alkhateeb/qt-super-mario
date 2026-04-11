@@ -3,8 +3,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QTimer>
-#include <QGraphicsTextItem>
-
+#include <QMessageBox>
 #include "player.hpp"
 
 int main(int argc, char *argv[])
@@ -33,13 +32,6 @@ int main(int argc, char *argv[])
   ground3.setPos(800, 250);
   scene.addItem(&ground3);
 
-  QGraphicsTextItem *deathText = new QGraphicsTextItem("You lost!");
-  QFont deathFont("Verdana", 50, QFont::Bold);
-  deathText->setFont(deathFont);
-  deathText->setDefaultTextColor(Qt::white);
-  deathText->hide();
-  scene.addItem(deathText);
-
   QGraphicsView view(&scene);
   view.setWindowTitle("Qt Super Mario");
   view.setFixedSize(640, 480);
@@ -52,20 +44,28 @@ int main(int argc, char *argv[])
                    [&view, &player]()
                    { view.centerOn(&player); });
   timer.start(33);
+
   QObject::connect(&player, &Player::playerDied,
-                   [&scene, &ground1, &ground2, &ground3, &deathText, &player, &app]()
+                   [&timer, &app, &view]()
                    {
-                     scene.setBackgroundBrush(Qt::red);
-                     ground1.hide();
-                     ground2.hide();
-                     ground3.hide();
-                     player.hide();
-                     // because the player moves so the scene is not static i made the death text
-                     // place based on your death pos
-                     deathText->setPos(player.x() - 120, 150);
-                     deathText->show();
-                     // i close app 3 seconds after u die
-                     QTimer::singleShot(3000, &app, &QApplication::quit);
+                     // i block the game loop
+                     timer.stop();
+                     QMessageBox msgBox(&view);
+                     msgBox.setWindowTitle("Game Over");
+                     msgBox.setText("You lost!");
+                     // i kept it looking the same as the old version
+                     msgBox.setStyleSheet("QMessageBox { background-color: red; }"
+                                          "QLabel { color: white; font-size: 24px; font-weight: bold; }"
+                                          "QPushButton { "
+                                          "  background-color: transparent; "
+                                          "  color: white; "
+                                          "  border: 1px solid white; "
+                                          "  padding: 5px 15px; "
+                                          "}");
+                     msgBox.setStandardButtons(QMessageBox::Ok);
+                     msgBox.exec();
+                     // since this line only finishes when ok is pressed I close the app after
+                     app.quit();
                    });
 
   return app.exec();
