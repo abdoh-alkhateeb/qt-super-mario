@@ -1,4 +1,5 @@
 #include "player.hpp"
+<<<<<<< HEAD
 #include <QMessageBox>
 #include <QBrush>
 
@@ -6,6 +7,12 @@ Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false), gameOver(false) {
   setRect(0, 0, 30, 60);
   setBrush(Qt::red);
+=======
+
+Player::Player(QGraphicsItem* parent)
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
+  setPixmap(QPixmap("assets/player.png"));
+>>>>>>> origin/feature/add-player-image
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
