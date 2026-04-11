@@ -1,11 +1,10 @@
 #include "player.hpp"
-
-#include <QBrush>
-
+#include <QMessageBox>
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+    : QObject(), QGraphicsPixmapItem(parent), velocityX(0), velocityY(0), onGround(false), gameover(false) {
+  setPixmap(QPixmap("assets/player.png"));
+
+
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
@@ -14,10 +13,10 @@ Player::Player(QGraphicsItem* parent)
 
 void Player::keyPressEvent(QKeyEvent* event) {
   if (event->key() == Qt::Key_Left) {
-    moveBy(-10, 0);
+    velocityX = -10;
   }
   if (event->key() == Qt::Key_Right) {
-    moveBy(10, 0);
+    velocityX = 10;
   }
   if (event->key() == Qt::Key_Space && onGround) {
     velocityY = -15;
@@ -25,10 +24,24 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
+	if(gameover) return;
+
   velocityY += 1;
   onGround = false;
-  moveBy(0, velocityY);
+  moveBy(velocityX, velocityY);
 
+	if (pos().y() > 400) {
+		gameover = true;
+
+    		QMessageBox msgBox;
+		msgBox.setWindowTitle("Game Over");
+		msgBox.setText("<h1>You Lost! 😢</h1>");
+		msgBox.setInformativeText("Better luck next time!");
+		msgBox.setStyleSheet("QMessageBox { background-color: #2c2c2c; color: white; }"
+                "QLabel { color: white; font-size: 14px; }"
+                 "QPushButton { background-color: red; color: white; padding: 5px 20px; }");
+msgBox.exec();
+	}
   QList<QGraphicsItem*> items = collidingItems();
 
   if (items.size() != 0) {
@@ -37,5 +50,18 @@ void Player::updateState() {
 
     velocityY = 0;
     onGround = true;
+    velocityX = 0;
   }
+if (pos().x() > 2200 && onGround && !gameover) {
+    gameover = true;
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("You Won!");
+    msgBox.setText("<h1>You Won! 🎉</h1>");
+    msgBox.setInformativeText("Congratulations!");
+    msgBox.setStyleSheet("QMessageBox { background-color: #2c2c2c; }"
+                         "QLabel { color: white; font-size: 14px; }"
+                         "QPushButton { background-color: green; color: white; padding: 5px 20px; }");
+    msgBox.exec();
+    return;
+}
 }
