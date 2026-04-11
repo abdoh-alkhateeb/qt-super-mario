@@ -1,10 +1,17 @@
 #pragma once
 
-#include <QGraphicsRectItem>
+#include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 #include <QObject>
+#include <QTimer>
 
-class Player : public QObject, public QGraphicsRectItem {
+enum class Direction : int {
+  Left,
+  Right
+};
+
+
+class Player : public QObject, public QGraphicsPixmapItem {
   Q_OBJECT
 
  public:
@@ -15,8 +22,9 @@ class Player : public QObject, public QGraphicsRectItem {
 
  protected:
   void keyPressEvent(QKeyEvent* event) override;
-
+  void keyReleaseEvent(QKeyEvent* event) override;
  private:
   int velocityY;
+  int velocityX;
   bool onGround;
 };
