@@ -18,5 +18,7 @@ class Player : public QObject, public QGraphicsRectItem {
 
  private:
   int velocityY;
+  int velocityX;
   bool onGround;
+  bool gameover;
 };
