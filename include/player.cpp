@@ -1,12 +1,13 @@
 #include "player.hpp"
 #include <QMessageBox>
 #include <QBrush>
-
+#include <QPixmap>
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
-  setPos(300, 0);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false){
+
+// Try this path in player.cpp
+setPixmap(QPixmap("../assets/player.png").scaled(30, 60));
+  setPos(300, 50);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
   setFocus();
