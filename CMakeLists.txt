@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.16)
+project(MyGameProject)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_AUTOMOC ON)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
+add_executable(MyGame src/main.cpp src/player.cpp include/player.hpp)
+target_include_directories(MyGame PUBLIC include)
+target_link_libraries(MyGame Qt6::Widgets)
