@@ -4,7 +4,7 @@
 #include <QGraphicsView>
 #include <QTimer>
 
-#include "player.hpp"
+#include "../include/player.hpp"
 
 int main(int argc, char* argv[]) {
   QApplication app(argc, argv);
@@ -20,6 +20,16 @@ int main(int argc, char* argv[]) {
   ground.setBrush(Qt::darkGreen);
   ground.setPos(100, 250);
   scene.addItem(&ground);
+
+  QGraphicsRectItem platform2(0, 0, 200, 30);
+  platform2.setBrush(Qt::darkGreen);
+  platform2.setPos(500, 150);
+  scene.addItem(&platform2);
+
+  QGraphicsRectItem platform3(0, 0, 300, 30);
+  platform3.setBrush(Qt::darkGreen);
+  platform3.setPos(800, 100);
+  scene.addItem(&platform3);
 
   QGraphicsView view(&scene);
   view.setWindowTitle("Qt Super Mario");
