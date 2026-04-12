@@ -1,6 +1,7 @@
 #include "player.hpp"
-
 #include <QBrush>
+#include <QMessageBox>
+#include <QApplication>
 
 Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
@@ -38,4 +39,9 @@ for (auto item : items) {
             onGround = true;
         }
 }
+}
+if (y() > 400) {
+        QMessageBox::information(nullptr, "You lost!");
+        QApplication::quit();
+    }
 }
