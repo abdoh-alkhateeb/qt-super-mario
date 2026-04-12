@@ -16,12 +16,24 @@ int main(int argc, char* argv[]) {
   Player player;
   scene.addItem(&player);
 
-  QGraphicsRectItem ground(0, 0, 300, 30);
-  ground.setBrush(Qt::darkGreen);
-  ground.setPos(100, 250);
-  scene.addItem(&ground);
 
-  QGraphicsView view(&scene);
+QGraphicsRectItem ground(0, 0, 300, 30);
+ground.setBrush(Qt::darkGreen);
+ground.setPos(100, 250);
+scene.addItem(&ground);
+
+
+QGraphicsRectItem platform2(0, 0, 200, 20);
+platform2.setBrush(Qt::darkGreen);
+platform2.setPos(350, 180);
+scene.addItem(&platform2);
+
+QGraphicsRectItem platform3(0, 0, 200, 20);
+platform3.setBrush(Qt::darkGreen);
+platform3.setPos(200, 120);
+scene.addItem(&platform3);
+
+ QGraphicsView view(&scene);
   view.setWindowTitle("Qt Super Mario");
   view.setFixedSize(640, 480);
   view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

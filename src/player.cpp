@@ -1,7 +1,8 @@
 #include "player.hpp"
-
+#include <QMessageBox>
 #include <QBrush>
-
+#include <QGraphicsScene>
+#include <QApplication>
 Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
   setRect(0, 0, 30, 60);
@@ -27,15 +28,26 @@ void Player::keyPressEvent(QKeyEvent* event) {
 void Player::updateState() {
   velocityY += 1;
   onGround = false;
+
   moveBy(0, velocityY);
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
-
-    velocityY = 0;
-    onGround = true;
-  }
-}
+  for (QGraphicsItem* item : items) {
+    if (velocityY > 0) {
+      if (y() + boundingRect().height() <= item->y() + velocityY) {
+        setY(item->y() - boundingRect().height());
+        velocityY = 0;
+        onGround = true;
+      }
+    }
+  
+}if (y() > scene()->height()) {
+    // Show the box and catch the user's action
+    int result = QMessageBox::information(nullptr, "game is over", "You lost!");
+    
+    // If they click the button (which is the default 'Ok' for information boxes)
+    if (result == QMessageBox::Ok) {
+        QApplication::quit(); 
+    }
+}}
