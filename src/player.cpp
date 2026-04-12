@@ -14,17 +14,28 @@ Player::Player(QGraphicsItem* parent)
 
 void Player::keyPressEvent(QKeyEvent* event) {
   if (event->key() == Qt::Key_Left) {
-    moveBy(-10, 0);
+    movingl = true;
   }
   if (event->key() == Qt::Key_Right) {
-    moveBy(10, 0);
+    movingr = true; 
   }
   if (event->key() == Qt::Key_Space && onGround) {
     velocityY = -15;
   }
 }
 
+void Player::keyReleaseEvent(QKeyEvent* event) {
+    if (event->key() == Qt::Key_Left)
+        movingl  = false;
+
+    if (event->key() == Qt::Key_Right)
+        movingr = false;
+}
+
 void Player::updateState() {
+  if(movingr) moveBy(10,0);
+  if(movingl) moveBy(-10,0);
+
   velocityY += 1;
   onGround = false;
   moveBy(0, velocityY);
