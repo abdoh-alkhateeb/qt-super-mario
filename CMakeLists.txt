@@ -1,9 +1,14 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.21)
 project(mygame)
 
 set(CMAKE_AUTOMOC ON)
+
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
-add_executable(${PROJECT_NAME} main.cpp player.cpp player.hpp)
+add_library(player STATIC src/player.cpp include/player.hpp)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
+add_executable(myapp src/main.cpp src/player.cpp include/player.hpp)
+
+target_include_directories(player PRIVATE include)
+target_link_libraries(myapp PRIVATE player)
+target_link_libraries(player PUBLIC Qt6::Widgets)
