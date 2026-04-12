@@ -1,10 +1,6 @@
-#include "player.hpp"
-<<<<<<< HEAD
+#include "../include/player.hpp"
 #include <QBrush>
 #include <QMessageBox>
-#include <QApplication>
-=======
->>>>>>> origin/feature/add-player-image
 
 Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
@@ -28,22 +24,23 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
-  velocityY += 1;
-  onGround = false;
-  moveBy(0, velocityY);
+    velocityY += 1;
+    onGround = false;
+    moveBy(0, velocityY);
 
-  QList<QGraphicsItem*> items = collidingItems();
+    QList<QGraphicsItem*> items = collidingItems();
 
-for (auto item : items) {
-        if (velocityY > 0) {
-            setY(item->y() - boundingRect().height());
-            velocityY = 0;
-            onGround = true;
-        }
-}
-}
-if (y() > 400) {
-        QMessageBox::information(nullptr, "You lost","you lost");
-        QApplication::quit();
+    if (items.size() != 0) {
+        QGraphicsItem* item = items[0];
+        setY(item->y() - boundingRect().height());
+
+        velocityY = 0;
+        onGround = true;
     }
+
+
+if (y() > 480) {
+        QMessageBox::information(nullptr, "You lost","you lost");
+    }
+
 }
