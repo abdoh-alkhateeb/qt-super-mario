@@ -1,12 +1,12 @@
 #include "player.hpp"
+
 #include <QMessageBox>
 #include <QBrush>
 #include <QGraphicsScene>
 #include <QApplication>
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
+  setPixmap(QPixmap("assets/player.png"));
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
@@ -43,11 +43,8 @@ void Player::updateState() {
     }
   
 }if (y() > scene()->height()) {
-    // Show the box and catch the user's action
-    int result = QMessageBox::information(nullptr, "game is over", "You lost!");
-    
-    // If they click the button (which is the default 'Ok' for information boxes)
-    if (result == QMessageBox::Ok) {
+       int result = QMessageBox::information(nullptr, "game is over", "You lost!");
+     if (result == QMessageBox::Ok) {
         QApplication::quit(); 
     }
 }}
