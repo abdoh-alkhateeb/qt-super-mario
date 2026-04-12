@@ -2,8 +2,6 @@
 #include <QBrush>
 #include <QMessageBox>
 
-=======
->>>>>>> origin/feature/add-player-image
 Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
   setPixmap(QPixmap("assets/player.png"));
