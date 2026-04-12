@@ -31,11 +31,11 @@ void Player::updateState() {
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
-
-    velocityY = 0;
-    onGround = true;
-  }
+for (auto item : items) {
+        if (velocityY > 0) {
+            setY(item->y() - boundingRect().height());
+            velocityY = 0;
+            onGround = true;
+        }
+}
 }
