@@ -3,6 +3,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QTimer>
+#include <QMessageBox>
 
 #include "player.hpp"
 
@@ -21,6 +22,16 @@ int main(int argc, char* argv[]) {
   ground.setPos(100, 250);
   scene.addItem(&ground);
 
+  QGraphicsRectItem platform1(0, 0, 300, 30);
+  platform1.setBrush(Qt::darkGreen);
+  platform1.setPos(500, 200);
+  scene.addItem(&platform1);
+
+  QGraphicsRectItem platform2(0, 0, 300, 30);
+  platform2.setBrush(Qt::darkGreen);
+  platform2.setPos(900, 150);
+  scene.addItem(&platform2);
+
   QGraphicsView view(&scene);
   view.setWindowTitle("Qt Super Mario");
   view.setFixedSize(640, 480);
@@ -29,8 +40,21 @@ int main(int argc, char* argv[]) {
 
   QTimer timer;
   QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
-  QObject::connect(&timer, &QTimer::timeout,
-                   [&view, &player]() { view.centerOn(&player); });
+  QObject::connect(&timer, &QTimer::timeout, [&view, &player, &timer]() { 
+
+    view.centerOn(&player);
+    
+    if (player.y() > 400) {
+      timer.stop();
+      QMessageBox msg;
+      msg.setWindowTitle("Game Over");
+      msg.setText("You lost!");
+      msg.exec();  
+      QApplication::quit();
+    }
+
+  });
+
   timer.start(33);
 
   return app.exec();
