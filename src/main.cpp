@@ -3,7 +3,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QTimer>
-
+#include <QLabel>
 #include "player.hpp"
 
 int main(int argc, char* argv[]) {
@@ -21,11 +21,25 @@ int main(int argc, char* argv[]) {
   ground.setPos(100, 250);
   scene.addItem(&ground);
 
+  QGraphicsRectItem ground2(0, 0, 300, 30);// second platform
+  ground2.setBrush(Qt::darkBlue);
+  ground2.setPos(480, 200);
+  scene.addItem(&ground2);
+  
+  QGraphicsRectItem ground3(0, 0, 300, 30);//third platform 
+  ground3.setBrush(Qt::darkGray);
+  ground3.setPos(860, 280);
+  scene.addItem(&ground3);
+
+  
+  
   QGraphicsView view(&scene);
   view.setWindowTitle("Qt Super Mario");
   view.setFixedSize(640, 480);
   view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   view.show();
+
+  
 
   QTimer timer;
   QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
