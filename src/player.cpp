@@ -1,11 +1,19 @@
 #include "player.hpp"
 
 #include <QBrush>
+#include <QDebug>
+#include <QMessageBox>
+#include <QGraphicsScene>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
+  QPixmap pix("/mnt/c/Users/moael/Programming/mario/assets/player.png");
+  if (pix.isNull()) {
+    qDebug() << "Warning: player.png failed to load!";
+  } else {
+    qDebug() << "Player image loaded:" << pix.size();
+  }
+  setPixmap(pix);
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
@@ -29,13 +37,25 @@ void Player::updateState() {
   onGround = false;
   moveBy(0, velocityY);
 
+  // Lose condition
+  if (y() > scene()->sceneRect().height()) {
+    QMessageBox msgBox;
+    msgBox.setText("You lost!");
+    msgBox.exec();
+
+    setPos(300, 0);
+    velocityY = 0;
+    return;
+  }
+
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
-
-    velocityY = 0;
-    onGround = true;
+  for (QGraphicsItem* item : items) {
+    if (velocityY > 0 && y() + boundingRect().height() <= item->y() + 10) {
+      setY(item->y() - boundingRect().height());
+      velocityY = 0;
+      onGround = true;
+      break;
+    }
   }
 }
