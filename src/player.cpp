@@ -1,16 +1,19 @@
 #include "player.hpp"
 
-#include <QBrush>
+#include <QApplication>
+#include <QGraphicsScene>
+#include <QMessageBox>
+#include <QPixmap>
+#include <QPainter>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
-  setPos(300, 0);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false), gameOver(false) {
+  setPixmap(QPixmap("../assets/player.png"));
+  setPos(300, 50);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
   setFocus();
-  }
+}
 
 void Player::keyPressEvent(QKeyEvent* event) {
   if (event->key() == Qt::Key_Left) {
@@ -25,7 +28,9 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
-  
+  if (gameOver) {
+    return;
+  }
 
   velocityY += 1;
   onGround = false;

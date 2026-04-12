@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
   ground2.setPos(480, 200);
   scene.addItem(&ground2);
   
-  QGraphicsRectItem ground3(0, 0, 300, 30);//third platform ( 3alya shwaya :D )
+  QGraphicsRectItem ground3(0, 0, 300, 30);//third platform 
   ground3.setBrush(Qt::darkGray);
   ground3.setPos(860, 280);
   scene.addItem(&ground3);
