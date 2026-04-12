@@ -1,19 +1,16 @@
 #include "player.hpp"
 
-#include <QApplication>
-#include <QGraphicsScene>
-#include <QMessageBox>
 #include <QBrush>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false), gameOver(false) {
+    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
   setRect(0, 0, 30, 60);
   setBrush(Qt::red);
-  setPos(300, 200);
+  setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
   setFocus();
-}
+  }
 
 void Player::keyPressEvent(QKeyEvent* event) {
   if (event->key() == Qt::Key_Left) {
