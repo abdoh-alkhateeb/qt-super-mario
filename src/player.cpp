@@ -41,7 +41,7 @@ for (auto item : items) {
 }
 }
 if (y() > 400) {
-        QMessageBox::information(nullptr, "You lost!");
+        QMessageBox::information(nullptr, "You lost","you lost");
         QApplication::quit();
     }
 }
