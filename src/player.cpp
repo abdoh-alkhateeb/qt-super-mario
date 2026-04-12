@@ -32,6 +32,11 @@ void Player::keyReleaseEvent(QKeyEvent* event) {
         movingr = false;
 }
 
+bool Player::outOfScreen(){
+    if (y() >  1000) return true; 
+    else return false;
+}
+
 void Player::updateState() {
   if(movingr) moveBy(10,0);
   if(movingl) moveBy(-10,0);

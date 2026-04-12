@@ -12,11 +12,10 @@ class Player : public QObject, public QGraphicsRectItem {
 
  public slots:
   void updateState();
-
+  bool outOfScreen();
  protected:
   void keyPressEvent(QKeyEvent* event) override;
   void keyReleaseEvent(QKeyEvent* event) override;
-
  private:
   int velocityY;
   bool onGround;

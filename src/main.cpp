@@ -3,6 +3,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QTimer>
+#include <QMessageBox>
 
 #include "player.hpp"
 
@@ -36,11 +37,24 @@ int main(int argc, char* argv[]) {
   view.setFixedSize(640, 480);
   view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   view.show();
+ 
+  QMessageBox loser;
+  loser.setWindowTitle("Hard Luck! :(");
+  loser.setText("You Lost!");
+
+  bool gameOver = false;
 
   QTimer timer;
   QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
   QObject::connect(&timer, &QTimer::timeout,
                    [&view, &player]() { view.centerOn(&player); });
+  QObject::connect(&timer, &QTimer::timeout, [&](){
+		   if(!gameOver && player.outOfScreen()){
+			gameOver = true;
+			loser.exec();
+		   }
+  });
+
   timer.start(33);
 
   return app.exec();
