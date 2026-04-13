@@ -3,35 +3,55 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QTimer>
+#include<QMessageBox>
+#include<QPushButton>
 
 #include "player.hpp"
 
-int main(int argc, char* argv[]) {
-  QApplication app(argc, argv);
 
-  QGraphicsScene scene;
-  scene.setSceneRect(0, 0, 2000, 400);
-  scene.setBackgroundBrush(QColor(135, 205, 235));
+int main(int argc, char *argv[])
+{
 
-  Player player;
-  scene.addItem(&player);
+    QApplication app(argc, argv);
 
-  QGraphicsRectItem ground(0, 0, 300, 30);
-  ground.setBrush(Qt::darkGreen);
-  ground.setPos(100, 250);
-  scene.addItem(&ground);
+    QGraphicsScene scene;
+    scene.setSceneRect(0, 0, 2000, 400);
+    scene.setBackgroundBrush(QColor(135, 205, 235));
 
-  QGraphicsView view(&scene);
-  view.setWindowTitle("Qt Super Mario");
-  view.setFixedSize(640, 480);
-  view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  view.show();
+    Player player;
+    scene.addItem(&player);
 
-  QTimer timer;
-  QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
-  QObject::connect(&timer, &QTimer::timeout,
-                   [&view, &player]() { view.centerOn(&player); });
-  timer.start(33);
+    QGraphicsRectItem ground(0, 0, 300, 30);
+    QGraphicsRectItem platform(0,0,100,20);
+    QGraphicsRectItem platform2(0,0,90,30);
 
-  return app.exec();
+    ground.setBrush(Qt::darkGreen);
+    platform.setBrush(Qt::yellow);
+    platform2.setBrush(Qt::blue);
+    ground.setPos(100, 250);
+    platform.setPos(510,250);
+    platform2.setPos(10,150);
+    scene.addItem(&ground);
+    scene.addItem(&platform);
+     scene.addItem(&platform2);
+
+    QGraphicsView view(&scene);
+    view.setWindowTitle("Qt Super Mario");
+    view.setFixedSize(640, 480);
+    view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view.show();
+
+    QTimer timer;
+    QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
+
+    QObject::connect(&timer, &QTimer::timeout, [&view, &player]() { view.centerOn(&player); });
+    QObject::connect(&player,&Player::PlayerLost,[&view](){ // &view in the capture(& alone also works) so that the anon function is aware of variables outside of it
+        QMessageBox::information(&view,"Message","You lost!");
+
+
+    });
+    timer.start(33);
+
+    return app.exec();
 }
+
