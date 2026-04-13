@@ -15,8 +15,12 @@ class Player : public QObject, public QGraphicsPixmapItem {
 
  protected:
   void keyPressEvent(QKeyEvent* event) override;
+  void keyReleaseEvent(QKeyEvent* event) override;
 
  private:
   int velocityY;
+  int velocityX;
   bool onGround;
+  QSet<int> keysHeld;
+
 };

@@ -9,7 +9,7 @@
 #include <QPixmap>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), velocityX(0), onGround(false) {
   setPixmap(QPixmap("assets/player.png"));
   setPos(300, 0);
 
@@ -18,21 +18,32 @@ Player::Player(QGraphicsItem* parent)
 }
 
 void Player::keyPressEvent(QKeyEvent* event) {
-  if (event->key() == Qt::Key_Left) {
-    moveBy(-10, 0);
-  }
-  if (event->key() == Qt::Key_Right) {
-    moveBy(10, 0);
-  }
+  keysHeld.insert(event->key());
   if (event->key() == Qt::Key_Space && onGround) {
     velocityY = -15;
   }
 }
 
+void Player::keyReleaseEvent(QKeyEvent* event) {
+  keysHeld.remove(event->key());
+}
+
 void Player::updateState() {
+
+  // Horizontal input
+  if (keysHeld.contains(Qt::Key_Left))  velocityX = -10;
+  if (keysHeld.contains(Qt::Key_Right)) velocityX = 10;
+
+  // Deceleration when no horizontal key held
+  if (!keysHeld.contains(Qt::Key_Left) && !keysHeld.contains(Qt::Key_Right)) {
+    if (velocityX > 0) velocityX -= 1;
+    else if (velocityX < 0) velocityX += 1;
+  }
+
+
   velocityY += 1;
   onGround = false;
-  moveBy(0, velocityY);
+  moveBy(velocityX, velocityY);  // ← horizontal + vertical together
 
   // Check if player fell off screen
   if (y() > scene()->sceneRect().height()) {
