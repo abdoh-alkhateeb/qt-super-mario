@@ -3,15 +3,20 @@
 #include <QApplication>
 #include <QBrush>
 #include <QMessageBox>
+#include <QPixmap>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(),
-      QGraphicsRectItem(parent),
-      velocityY(0),
-      onGround(false),
-      gameOver(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false), gameOver(false) {
+  QPixmap pixmap(":/images/player.png");
+
+  if (!pixmap.isNull()) {
+    setPixmap(pixmap);
+  } else {
+    QPixmap fallback(30, 60);
+    fallback.fill(Qt::red);
+    setPixmap(fallback);
+  }
+
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
@@ -42,8 +47,8 @@ void Player::updateState() {
   QList<QGraphicsItem*> items = collidingItems();
 
   for (QGraphicsItem* item : items) {
-    if (y() + rect().height() <= item->y() + velocityY + 1) {
-      setY(item->y() - rect().height());
+    if (y() + boundingRect().height() <= item->y() + velocityY + 1) {
+      setY(item->y() - boundingRect().height());
       velocityY = 0;
       onGround = true;
       break;
