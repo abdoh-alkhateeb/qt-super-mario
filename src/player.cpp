@@ -38,6 +38,23 @@ void Player::updateState() {
     velocityY = 0;
     onGround = true;
   }
+
+    if (player.x() > 500 || player.x() < 100 || player.y() > 350 || player.y() < 0) {
+
+    QWidget* window = new QWidget;
+    window->setWindowTitle("Popup");
+
+    QLabel* label = new QLabel("You died!");
+    label->setAlignment(Qt::AlignCenter);
+
+    QVBoxLayout* layout = new QVBoxLayout;
+    layout->addWidget(label);
+
+    window->setLayout(layout);
+    window->resize(300, 150);
+    window->show();
+      
+  }
 }
 
 Player::~Player() {}
