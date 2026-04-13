@@ -1,11 +1,9 @@
 #include "player.hpp"
-
-#include <QBrush>
-
+#include <QMessageBox>
+#include <QApplication>
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
+  setPixmap(QPixmap("assets/player.png"));
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
@@ -18,6 +16,7 @@ void Player::keyPressEvent(QKeyEvent* event) {
   }
   if (event->key() == Qt::Key_Right) {
     moveBy(10, 0);
+
   }
   if (event->key() == Qt::Key_Space && onGround) {
     velocityY = -15;
@@ -25,17 +24,27 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
-  velocityY += 1;
-  onGround = false;
-  moveBy(0, velocityY);
+    velocityY += 1;
+    moveBy(0, velocityY);
 
-  QList<QGraphicsItem*> items = collidingItems();
+    QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
+    for (QGraphicsItem* item : items) {
+        if (velocityY > 0) {
+            setY(item->y() - boundingRect().height());
+            velocityY = 0;
+            onGround = true;
+            return;
+        }
+    }
 
-    velocityY = 0;
-    onGround = true;
-  }
+    onGround = false;
+    if (y() > 400) {
+      QMessageBox msgBox;
+      msgBox.setWindowTitle("Game Over");
+      msgBox.setText("You lost!");
+      msgBox.setIcon(QMessageBox::Critical); // adds a "critical" error icon
+      msgBox.exec();
+      QApplication::quit();
+    }
 }

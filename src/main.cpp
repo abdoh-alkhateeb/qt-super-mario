@@ -21,11 +21,22 @@ int main(int argc, char* argv[]) {
   ground.setPos(100, 250);
   scene.addItem(&ground);
 
+  QGraphicsRectItem platform1(0, 0, 200, 20);
+  platform1.setBrush(Qt::darkGreen);
+  platform1.setPos(450, 200);
+  scene.addItem(&platform1);
+
+  QGraphicsRectItem platform2(0, 0, 200, 20);
+  platform2.setBrush(Qt::darkGreen);
+  platform2.setPos(750, 170);
+  scene.addItem(&platform2);
+
   QGraphicsView view(&scene);
   view.setWindowTitle("Qt Super Mario");
   view.setFixedSize(640, 480);
   view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   view.show();
+  player.setFocus();
 
   QTimer timer;
   QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
