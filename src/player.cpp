@@ -29,11 +29,12 @@ void Player::updateState() {
   onGround = false;
   moveBy(0, velocityY);
 
-  if ((x() > 600 || x() < 0) || (y() < 0 || y() > 600)){
+  if (x() > 600 || x() < 0 || y() > 600){
     QMessageBox* msg = new QMessageBox();
     msg -> setWindowTitle("Notification");
     msg -> setText("You Lost!!");
     msg -> exec();
+    setPos(150,0);
   }
   QList<QGraphicsItem*> items = collidingItems();
 
