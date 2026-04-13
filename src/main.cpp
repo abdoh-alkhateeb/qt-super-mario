@@ -4,7 +4,7 @@
 #include <QGraphicsView>
 #include <QTimer>
 
-#include "player.hpp"
+#include "../include/player.hpp"
 
 int main(int argc, char* argv[]) {
   QApplication app(argc, argv);
