@@ -1,13 +1,12 @@
 #include "player.hpp"
-
 #include <QBrush>
+#include <QMessageBox>
+#include <QApplication>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
+  setPixmap(QPixmap("assets/player.png"));
   setPos(300, 0);
-
   setFlag(QGraphicsItem::ItemIsFocusable);
   setFocus();
 }
@@ -28,14 +27,15 @@ void Player::updateState() {
   velocityY += 1;
   onGround = false;
   moveBy(0, velocityY);
-
   QList<QGraphicsItem*> items = collidingItems();
-
   if (items.size() != 0) {
     QGraphicsItem* item = items[0];
     setY(item->y() - boundingRect().height());
-
     velocityY = 0;
     onGround = true;
+  }
+  if (y() > 400) {
+    QMessageBox::information(nullptr, "Game Over", "You lost!");
+    QApplication::quit();
   }
 }
