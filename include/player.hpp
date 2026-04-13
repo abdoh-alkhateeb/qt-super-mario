@@ -17,6 +17,6 @@ class Player : public QObject, public QGraphicsRectItem {
   void keyPressEvent(QKeyEvent* event) override;
 
  private:
-  int velocityY;
+  double velocityY;
   bool onGround;
 };

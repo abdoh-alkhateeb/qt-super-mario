@@ -25,7 +25,7 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
-  velocityY += 1;
+  velocityY += 0.6;
   onGround = false;
   moveBy(0, velocityY);
 
