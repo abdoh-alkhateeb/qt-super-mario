@@ -1,7 +1,7 @@
 #include "player.hpp"
-
+#include <QMessageBox>
 #include <QBrush>
-
+#include <QApplication>
 Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
   setRect(0, 0, 30, 60);
@@ -41,4 +41,12 @@ void Player::updateState() {
     }
 
     onGround = false;
+    if (y() > 400) {
+      QMessageBox msgBox;
+      msgBox.setWindowTitle("Game Over");
+      msgBox.setText("You lost!");
+      msgBox.setIcon(QMessageBox::Critical); // adds a "critical" error icon
+      msgBox.exec();
+      QApplication::quit();
+    }
 }
