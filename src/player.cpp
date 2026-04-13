@@ -1,5 +1,6 @@
 #include "player.hpp"
-
+#include <QMessageBox>
+#include <QApplication>
 #include <QBrush>
 
 Player::Player(QGraphicsItem* parent)
@@ -27,15 +28,26 @@ void Player::keyPressEvent(QKeyEvent* event) {
 void Player::updateState() {
   velocityY += 1;
   onGround = false;
+
+  qreal previousY = y();
+
   moveBy(0, velocityY);
+
+  if (y() > 400) {
+    QMessageBox::information(nullptr, "Game Over", "You lost!");
+    QApplication::quit();
+    return;
+  }
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
+  for (QGraphicsItem* item : items) {
+    if (velocityY > 0 &&
+        previousY + boundingRect().height() <= item->y()) {
 
-    velocityY = 0;
-    onGround = true;
+      setY(item->y() - boundingRect().height());
+      velocityY = 0;
+      onGround = true;
+    }
   }
 }
