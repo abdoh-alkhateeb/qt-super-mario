@@ -10,13 +10,13 @@ class Player : public QObject, public QGraphicsRectItem {
  public:
   Player(QGraphicsItem* parent = nullptr);
 
+  ~Player();
+
  public slots:
   void updateState();
 
  protected:
   void keyPressEvent(QKeyEvent* event) override;
-
-~Player();
 
  private:
   int velocityY;
