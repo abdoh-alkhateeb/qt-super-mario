@@ -1,6 +1,7 @@
 #include "player.hpp"
 
 #include <QBrush>
+#include <QGraphicsScene>
 
 Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
@@ -25,17 +26,25 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
+  const qreal previousBottom = sceneBoundingRect().bottom();
+
   velocityY += 1;
   onGround = false;
   moveBy(0, velocityY);
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
+  for (QGraphicsItem* item : items) {
+    const QRectF itemRect = item->sceneBoundingRect();
+    const QRectF playerRect = sceneBoundingRect();
 
-    velocityY = 0;
-    onGround = true;
+    if (velocityY >= 0 &&
+        previousBottom <= itemRect.top() + 5 &&
+        playerRect.bottom() >= itemRect.top()) {
+      setY(itemRect.top() - rect().height());
+      velocityY = 0;
+      onGround = true;
+      break;
+    }
   }
 }
