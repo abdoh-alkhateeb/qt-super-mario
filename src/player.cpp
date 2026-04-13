@@ -1,6 +1,8 @@
 #include "player.hpp"
 
 #include <QBrush>
+#include <QLabel>
+#include <QVBoxLayout>
 
 Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
@@ -38,6 +40,24 @@ void Player::updateState() {
     velocityY = 0;
     onGround = true;
   }
+
+  if (!dead && (x() > 500 || x() < 100 || y() > 350 || y() < 0)) {
+
+    dead = true;
+
+    QWidget* window = new QWidget;
+    window->setWindowTitle("Popup");
+
+    QLabel* label = new QLabel("You died!");
+    label->setAlignment(Qt::AlignCenter);
+
+    QVBoxLayout* layout = new QVBoxLayout;
+    layout->addWidget(label);
+
+    window->setLayout(layout);
+    window->resize(300, 150);
+    window->show();
+}
 }
 
 Player::~Player() {}
