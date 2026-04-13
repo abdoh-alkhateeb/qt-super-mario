@@ -26,6 +26,7 @@ int main(int argc, char* argv[]) {
   view.setFixedSize(640, 480);
   view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   view.show();
+  player.setFocus();
 
   QTimer timer;
   QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
