@@ -1,11 +1,12 @@
 #include "player.hpp"
 
+#include <QMessageBox>
 #include <QBrush>
-
+#include <QGraphicsScene>
+#include <QApplication>
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
+  setPixmap(QPixmap("assets/player.png"));
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
@@ -27,15 +28,23 @@ void Player::keyPressEvent(QKeyEvent* event) {
 void Player::updateState() {
   velocityY += 1;
   onGround = false;
+
   moveBy(0, velocityY);
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
-
-    velocityY = 0;
-    onGround = true;
-  }
-}
+  for (QGraphicsItem* item : items) {
+    if (velocityY > 0) {
+      if (y() + boundingRect().height() <= item->y() + velocityY) {
+        setY(item->y() - boundingRect().height());
+        velocityY = 0;
+        onGround = true;
+      }
+    }
+  
+}if (y() > scene()->height()) {
+       int result = QMessageBox::information(nullptr, "game is over", "You lost!");
+     if (result == QMessageBox::Ok) {
+        QApplication::quit(); 
+    }
+}}
