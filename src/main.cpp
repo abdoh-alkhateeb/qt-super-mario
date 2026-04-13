@@ -45,9 +45,9 @@ int main(int argc, char *argv[])
     QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
 
     QObject::connect(&timer, &QTimer::timeout, [&view, &player]() { view.centerOn(&player); });
-    QObject::connect(&player,&Player::PlayerLost,[&](){ // &view in the capture(& alone also works) so that the anon function is aware of variables outside of it
+    QObject::connect(&player,&Player::PlayerLost,[&view](){ // &view in the capture(& alone also works) so that the anon function is aware of variables outside of it
         QMessageBox::information(&view,"Message","You lost!");
-        timer.start(33);
+
 
     });
     timer.start(33);
