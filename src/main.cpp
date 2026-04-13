@@ -23,12 +23,12 @@ int main(int argc, char* argv[]) {
 
   QGraphicsRectItem ground2(0, 0, 100, 30);
   ground.setBrush(Qt::darkGreen);
-  ground.setPos(300, 250);
+  ground.setPos(200, 250);
   scene.addItem(&ground2);
 
   QGraphicsRectItem ground3(0, 0, 100, 30);
   ground.setBrush(Qt::darkGreen);
-  ground.setPos(500, 250);
+  ground.setPos(300, 250);
   scene.addItem(&ground3);
 
   QGraphicsView view(&scene);
