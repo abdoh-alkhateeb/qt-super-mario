@@ -31,11 +31,13 @@ void Player::updateState() {
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
-
-    velocityY = 0;
-    onGround = true;
+for (QGraphicsItem* item : items) {
+    // Make sure we land on top, not clip through sides
+    if (y() + boundingRect().height() <= item->y() + item->boundingRect().height()) {
+      setY(item->y() - boundingRect().height());
+      velocityY = 0;
+      onGround = true;
+      break;
+    }
   }
 }

@@ -16,10 +16,23 @@ int main(int argc, char* argv[]) {
   Player player;
   scene.addItem(&player);
 
+//Existing platform
   QGraphicsRectItem ground(0, 0, 300, 30);
   ground.setBrush(Qt::darkGreen);
   ground.setPos(100, 250);
   scene.addItem(&ground);
+
+// Platform 2 — further right and higher
+QGraphicsRectItem platform2(0, 0, 200, 30);
+platform2.setBrush(Qt::darkGreen);
+platform2.setPos(500, 170);
+scene.addItem(&platform2);
+
+// Platform 3 — even further right
+QGraphicsRectItem platform3(0, 0, 200, 30);
+platform3.setBrush(Qt::darkGreen);
+platform3.setPos(850, 250);
+scene.addItem(&platform3);
 
   QGraphicsView view(&scene);
   view.setWindowTitle("Qt Super Mario");
