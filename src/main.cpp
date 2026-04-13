@@ -40,23 +40,6 @@ int main(int argc, char* argv[]) {
   view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   view.show();
 
-  
-  if (player.x() > 500 || player.x() < 100 || player.y() > 350 || player.y() < 0) {
-
-    QWidget* window = new QWidget;
-    window->setWindowTitle("Popup");
-
-    QLabel* label = new QLabel("You died!");
-    label->setAlignment(Qt::AlignCenter);
-
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget(label);
-
-    window->setLayout(layout);
-    window->resize(300, 150);
-    window->show();
-      
-  }
 
   QTimer timer;
   QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
