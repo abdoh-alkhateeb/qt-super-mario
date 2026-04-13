@@ -1,10 +1,16 @@
 #include "player.hpp"
 
+#include <QApplication>
 #include <QBrush>
 #include <QGraphicsScene>
+#include <QMessageBox>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
+    : QObject(),
+      QGraphicsRectItem(parent),
+      velocityY(0),
+      onGround(false),
+      hasLost(false) {
   setRect(0, 0, 30, 60);
   setBrush(Qt::red);
   setPos(300, 0);
@@ -26,6 +32,10 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
+  if (hasLost) {
+    return;
+  }
+
   const qreal previousBottom = sceneBoundingRect().bottom();
 
   velocityY += 1;
@@ -46,5 +56,11 @@ void Player::updateState() {
       onGround = true;
       break;
     }
+  }
+
+  if (scene() && sceneBoundingRect().top() > scene()->sceneRect().bottom()) {
+    hasLost = true;
+    QMessageBox::information(nullptr, "Qt Super Mario", "You lost!");
+    QApplication::quit();
   }
 }
