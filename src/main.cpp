@@ -2,8 +2,10 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QTimer>
 #include <QMessageBox>
+#include <QTimer>
+#include <QVector>
+#include <QRectF>
 
 #include "player.hpp"
 
@@ -14,29 +16,30 @@ int main(int argc, char* argv[]) {
   scene.setSceneRect(0, 0, 2000, 400);
   scene.setBackgroundBrush(QColor(135, 205, 235));
 
-  Player player;
+  QVector<QRectF> platformRects = {
+      QRectF(100, 250, 300, 30),
+      QRectF(500, 200, 300, 30),
+      QRectF(900, 150, 300, 30)
+  };
+
+  Player player(platformRects);
   scene.addItem(&player);
 
-  QGraphicsRectItem ground(0, 0, 300, 30);
-  ground.setBrush(Qt::darkGreen);
-  ground.setPos(100, 250);
-  scene.addItem(&ground);
-
- QGraphicsRectItem platform2(0, 0, 300, 30);
-  platform2.setBrush(Qt::darkGreen);
-  platform2.setPos(500, 200);
-  scene.addItem(&platform2);
-
-  QGraphicsRectItem platform3(0, 0, 300, 30);
-  platform3.setBrush(Qt::darkGreen);
-  platform3.setPos(900, 150);
-  scene.addItem(&platform3);
+  for (const QRectF& rect : platformRects) {
+    QGraphicsRectItem* platform = scene.addRect(rect, QPen(Qt::NoPen), QBrush(Qt::darkGreen));
+    Q_UNUSED(platform);
+  }
 
   QGraphicsView view(&scene);
   view.setWindowTitle("Qt Super Mario");
   view.setFixedSize(640, 480);
   view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  view.setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   view.show();
+
+  view.setFocus();
+  scene.setFocusItem(&player);
+  player.setFocus();
 
   QTimer timer;
   QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
