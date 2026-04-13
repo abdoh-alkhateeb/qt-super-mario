@@ -1,12 +1,18 @@
 #include "player.hpp"
 
-#include <QBrush>
+#include <QPixmap>
+#include <QtMath>
 
-Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
-  setPos(300, 0);
+Player::Player(const QVector<QRectF>& platformRects, QGraphicsItem* parent)
+    : QObject(),
+      QGraphicsPixmapItem(parent),
+      velocityY(0),
+      onGround(false),
+      gameOver(false),
+      platforms(platformRects) {
+  QPixmap pixmap("../assets/player.png");
+  setPixmap(pixmap.scaled(30, 60, Qt::IgnoreAspectRatio, Qt::FastTransformation));
+  setPos(150, 100);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
   setFocus();
@@ -14,10 +20,10 @@ Player::Player(QGraphicsItem* parent)
 
 void Player::keyPressEvent(QKeyEvent* event) {
   if (event->key() == Qt::Key_Left) {
-    moveBy(-10, 0);
+    moveBy(-25, 0);
   }
   if (event->key() == Qt::Key_Right) {
-    moveBy(10, 0);
+    moveBy(25, 0);
   }
   if (event->key() == Qt::Key_Space && onGround) {
     velocityY = -15;
@@ -25,17 +31,66 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
-  velocityY += 1;
-  onGround = false;
-  moveBy(0, velocityY);
+  if (gameOver) {
+    return;
+  }
 
-  QList<QGraphicsItem*> items = collidingItems();
+  qreal playerWidth = boundingRect().width();
+  qreal playerHeight = boundingRect().height();
+  qreal playerX = x();
+  qreal playerY = y();
+  qreal playerBottom = playerY + playerHeight;
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
+  bool supported = false;
 
-    velocityY = 0;
-    onGround = true;
+  for (const QRectF& platform : platforms) {
+    bool horizontallyOverlapping =
+        playerX + playerWidth > platform.left() &&
+        playerX < platform.right();
+
+    bool standingOnTop =
+        qAbs(playerBottom - platform.top()) <= 2;
+
+    if (horizontallyOverlapping && standingOnTop && velocityY >= 0) {
+      setY(platform.top() - playerHeight);
+      velocityY = 0;
+      onGround = true;
+      supported = true;
+      break;
+    }
+  }
+
+  if (!supported) {
+    onGround = false;
+    velocityY += 1;
+    moveBy(0, velocityY);
+
+    qreal newX = x();
+    qreal newY = y();
+    qreal newBottom = newY + playerHeight;
+
+    for (const QRectF& platform : platforms) {
+      bool horizontallyOverlapping =
+          newX + playerWidth > platform.left() &&
+          newX < platform.right();
+
+      bool landedOnTop =
+          velocityY >= 0 &&
+          playerBottom <= platform.top() + 15 &&
+          newBottom >= platform.top();
+
+      if (horizontallyOverlapping && landedOnTop) {
+        setY(platform.top() - playerHeight);
+        velocityY = 0;
+        onGround = true;
+        supported = true;
+        break;
+      }
+    }
+  }
+
+  if (y() > 400) {
+    gameOver = true;
+    emit playerLost();
   }
 }

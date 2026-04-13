@@ -1,17 +1,22 @@
 #pragma once
 
-#include <QGraphicsRectItem>
+#include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 #include <QObject>
+#include <QRectF>
+#include <QVector>
 
-class Player : public QObject, public QGraphicsRectItem {
+class Player : public QObject, public QGraphicsPixmapItem {
   Q_OBJECT
 
  public:
-  Player(QGraphicsItem* parent = nullptr);
+  Player(const QVector<QRectF>& platforms, QGraphicsItem* parent = nullptr);
 
  public slots:
   void updateState();
+
+ signals:
+  void playerLost();
 
  protected:
   void keyPressEvent(QKeyEvent* event) override;
@@ -19,4 +24,6 @@ class Player : public QObject, public QGraphicsRectItem {
  private:
   int velocityY;
   bool onGround;
+  bool gameOver;
+  QVector<QRectF> platforms;
 };
