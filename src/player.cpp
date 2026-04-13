@@ -14,10 +14,10 @@ Player::Player(QGraphicsItem* parent)
 
 void Player::keyPressEvent(QKeyEvent* event) {
   if (event->key() == Qt::Key_Left) {
-    moveBy(-10, 0);
+    moveBy(-25, 0);
   }
   if (event->key() == Qt::Key_Right) {
-    moveBy(10, 0);
+    moveBy(25, 0);
   }
   if (event->key() == Qt::Key_Space && onGround) {
     velocityY = -15;
@@ -31,11 +31,12 @@ void Player::updateState() {
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
-
-    velocityY = 0;
-    onGround = true;
+  for (QGraphicsItem* item : items) {
+    if (velocityY >= 0 && y() + boundingRect().height() <= item->y() + velocityY + 1) {
+      setY(item->y() - boundingRect().height());
+      velocityY = 0;
+      onGround = true;
+      break;
+    }
   }
 }
