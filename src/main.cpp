@@ -3,6 +3,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QTimer>
+#include <QMessageBox>
 
 #include "player.hpp"
 
@@ -41,6 +42,12 @@ int main(int argc, char* argv[]) {
   QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
   QObject::connect(&timer, &QTimer::timeout,
                    [&view, &player]() { view.centerOn(&player); });
+
+  QObject::connect(&player, &Player::playerLost, [&timer]() {
+    timer.stop();
+    QMessageBox::information(nullptr, "Game Over", "You lost!");
+  });
+
   timer.start(33);
 
   return app.exec();

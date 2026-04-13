@@ -13,10 +13,14 @@ class Player : public QObject, public QGraphicsRectItem {
  public slots:
   void updateState();
 
+ signals:
+  void playerLost();
+
  protected:
   void keyPressEvent(QKeyEvent* event) override;
 
  private:
   int velocityY;
   bool onGround;
+  bool gameOver;
 };

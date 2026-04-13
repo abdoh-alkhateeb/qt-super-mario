@@ -3,7 +3,7 @@
 #include <QBrush>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
+    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false), gameOver(false) {
   setRect(0, 0, 30, 60);
   setBrush(Qt::red);
   setPos(300, 0);
@@ -25,6 +25,10 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
+  if (gameOver) {
+    return;
+  }
+
   velocityY += 1;
   onGround = false;
   moveBy(0, velocityY);
@@ -38,5 +42,10 @@ void Player::updateState() {
       onGround = true;
       break;
     }
+  }
+
+  if (y() > 400) {
+    gameOver = true;
+    emit playerLost();
   }
 }
