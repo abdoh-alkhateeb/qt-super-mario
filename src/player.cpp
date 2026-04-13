@@ -1,11 +1,16 @@
 #include "player.hpp"
 
-#include <QBrush>
+#include <QApplication>
+
+#include <QMessageBox>
+
+#include <QGraphicsScene>
+
+#include <QPixmap>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), velocityX(0), onGround(false) {
+  setPixmap(QPixmap("assets/player.png"));
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
@@ -13,29 +18,53 @@ Player::Player(QGraphicsItem* parent)
 }
 
 void Player::keyPressEvent(QKeyEvent* event) {
-  if (event->key() == Qt::Key_Left) {
-    moveBy(-10, 0);
-  }
-  if (event->key() == Qt::Key_Right) {
-    moveBy(10, 0);
-  }
+  keysHeld.insert(event->key());
   if (event->key() == Qt::Key_Space && onGround) {
     velocityY = -15;
   }
 }
 
+void Player::keyReleaseEvent(QKeyEvent* event) {
+  keysHeld.remove(event->key());
+}
+
 void Player::updateState() {
+
+  // Only set horizontal velocity when on the ground
+  if (keysHeld.contains(Qt::Key_Left) && onGround)  velocityX = -10;
+  if (keysHeld.contains(Qt::Key_Right) && onGround) velocityX = 10;
+
+  // Deceleration when no horizontal key held
+  // Deceleration still applies mid-air (preserves momentum when airborne)
+  if (!keysHeld.contains(Qt::Key_Left) && !keysHeld.contains(Qt::Key_Right)) {
+    if (velocityX > 0) velocityX -= 1;
+    else if (velocityX < 0) velocityX += 1;
+  }
+
+
   velocityY += 1;
   onGround = false;
-  moveBy(0, velocityY);
+  moveBy(velocityX, velocityY);  // ← horizontal + vertical together
+
+  // Check if player fell off screen
+  if (y() > scene()->sceneRect().height()) {
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Game Over");
+    msgBox.setText("You lost!");
+    msgBox.exec();
+    QApplication::quit();   // or reset position — depends on preference
+    return;
+  }
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
-
-    velocityY = 0;
-    onGround = true;
+for (QGraphicsItem* item : items) {
+    // Make sure we land on top, not clip through sides
+    if (y() + boundingRect().height() <= item->y() + item->boundingRect().height()) {
+      setY(item->y() - boundingRect().height());
+      velocityY = 0;
+      onGround = true;
+      break;
+    }
   }
 }
