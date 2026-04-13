@@ -1,5 +1,11 @@
 #include "player.hpp"
 
+#include <QApplication>
+
+#include <QMessageBox>
+
+#include <QGraphicsScene>
+
 #include <QBrush>
 
 Player::Player(QGraphicsItem* parent)
@@ -28,6 +34,16 @@ void Player::updateState() {
   velocityY += 1;
   onGround = false;
   moveBy(0, velocityY);
+
+  // Check if player fell off screen
+  if (y() > scene()->sceneRect().height()) {
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Game Over");
+    msgBox.setText("You lost!");
+    msgBox.exec();
+    QApplication::quit();   // or reset position — depends on preference
+    return;
+  }
 
   QList<QGraphicsItem*> items = collidingItems();
 
