@@ -12,11 +12,15 @@ class Player : public QObject, public QGraphicsRectItem {
 
  public slots:
   void updateState();
-
+     void CheckBoundary();
+ public:
+  signals:
+     void PlayerLost();
  protected:
   void keyPressEvent(QKeyEvent* event) override;
 
  private:
   int velocityY;
   bool onGround;
+  bool fellbelowBoundary=false;
 };

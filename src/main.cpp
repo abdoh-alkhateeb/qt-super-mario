@@ -4,13 +4,16 @@
 #include <QGraphicsView>
 #include <QTimer>
 #include<QMessageBox>
+#include<QPushButton>
 
 #include "player.hpp"
 
 
 int main(int argc, char *argv[])
 {
+
     QApplication app(argc, argv);
+    bool didFall= false;
 
     QGraphicsScene scene;
     scene.setSceneRect(0, 0, 2000, 400);
@@ -22,7 +25,7 @@ int main(int argc, char *argv[])
     QGraphicsRectItem ground(0, 0, 300, 30);
     QGraphicsRectItem platform(0,0,100,20);
     QGraphicsRectItem platform2(0,0,90,30);
-    QMessageBox message;
+
     ground.setBrush(Qt::darkGreen);
     platform.setBrush(Qt::yellow);
     platform2.setBrush(Qt::blue);
@@ -31,7 +34,7 @@ int main(int argc, char *argv[])
     platform2.setPos(10,150);
     scene.addItem(&ground);
     scene.addItem(&platform);
-        scene.addItem(&platform2);
+     scene.addItem(&platform2);
 
     QGraphicsView view(&scene);
     view.setWindowTitle("Qt Super Mario");
@@ -41,7 +44,12 @@ int main(int argc, char *argv[])
 
     QTimer timer;
     QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
+
     QObject::connect(&timer, &QTimer::timeout, [&view, &player]() { view.centerOn(&player); });
+    QObject::connect(&player,&Player::PlayerLost,[&view](){
+        QMessageBox::information(&view,"Message","You lost!");
+
+    });
     timer.start(33);
 
     return app.exec();
