@@ -30,11 +30,12 @@ void Player::keyReleaseEvent(QKeyEvent* event) {
 
 void Player::updateState() {
 
-  // Horizontal input
-  if (keysHeld.contains(Qt::Key_Left))  velocityX = -10;
-  if (keysHeld.contains(Qt::Key_Right)) velocityX = 10;
+  // Only set horizontal velocity when on the ground
+  if (keysHeld.contains(Qt::Key_Left) && onGround)  velocityX = -10;
+  if (keysHeld.contains(Qt::Key_Right) && onGround) velocityX = 10;
 
   // Deceleration when no horizontal key held
+  // Deceleration still applies mid-air (preserves momentum when airborne)
   if (!keysHeld.contains(Qt::Key_Left) && !keysHeld.contains(Qt::Key_Right)) {
     if (velocityX > 0) velocityX -= 1;
     else if (velocityX < 0) velocityX += 1;
