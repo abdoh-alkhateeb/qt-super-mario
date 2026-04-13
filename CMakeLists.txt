@@ -11,5 +11,7 @@ add_executable(QtSuperMario
     include/player.hpp   # Must be listed so MOC processes the Q_OBJECT macro
 )
 
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
+
 target_include_directories(QtSuperMario PRIVATE include)
 target_link_libraries(QtSuperMario PRIVATE Qt6::Widgets)
