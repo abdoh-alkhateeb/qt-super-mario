@@ -1,9 +1,15 @@
 #include "player.hpp"
 
+#include <QApplication>
 #include <QBrush>
+#include <QMessageBox>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
+    : QObject(),
+      QGraphicsRectItem(parent),
+      velocityY(0),
+      onGround(false),
+      gameOver(false) {
   setRect(0, 0, 30, 60);
   setBrush(Qt::red);
   setPos(300, 0);
@@ -25,17 +31,28 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
+  if (gameOver) {
+    return;
+  }
+
   velocityY += 1;
   onGround = false;
   moveBy(0, velocityY);
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
+  for (QGraphicsItem* item : items) {
+    if (y() + rect().height() <= item->y() + velocityY + 1) {
+      setY(item->y() - rect().height());
+      velocityY = 0;
+      onGround = true;
+      break;
+    }
+  }
 
-    velocityY = 0;
-    onGround = true;
+  if (y() > 400) {
+    gameOver = true;
+    QMessageBox::information(nullptr, "Game Over", "You lost!");
+    QApplication::quit();
   }
 }
