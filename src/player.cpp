@@ -1,11 +1,22 @@
 #include "player.hpp"
 
+#include <QApplication>
 #include <QBrush>
+#include <QMessageBox>
+#include <QPixmap>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false), gameOver(false) {
+  QPixmap pixmap(":/images/player.png");
+
+  if (!pixmap.isNull()) {
+    setPixmap(pixmap);
+  } else {
+    QPixmap fallback(30, 60);
+    fallback.fill(Qt::red);
+    setPixmap(fallback);
+  }
+
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
@@ -25,17 +36,28 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
+  if (gameOver) {
+    return;
+  }
+
   velocityY += 1;
   onGround = false;
   moveBy(0, velocityY);
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
+  for (QGraphicsItem* item : items) {
+    if (y() + boundingRect().height() <= item->y() + velocityY + 1) {
+      setY(item->y() - boundingRect().height());
+      velocityY = 0;
+      onGround = true;
+      break;
+    }
+  }
 
-    velocityY = 0;
-    onGround = true;
+  if (y() > 400) {
+    gameOver = true;
+    QMessageBox::information(nullptr, "Game Over", "You lost!");
+    QApplication::quit();
   }
 }
