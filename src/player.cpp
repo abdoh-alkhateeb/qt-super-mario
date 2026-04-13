@@ -44,7 +44,7 @@ void Player::updateState()
         velocityY = 0;
         onGround = true;
     }
-    Player::CheckBoundary();
+    Player::CheckBoundary(); //every frame check for the boundary
 
     }
 

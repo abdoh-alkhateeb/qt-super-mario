@@ -22,5 +22,5 @@ class Player : public QObject, public QGraphicsRectItem {
  private:
   int velocityY;
   bool onGround;
-  bool fellbelowBoundary=false;
+  bool fellbelowBoundary; //variable to check boundaries
 };

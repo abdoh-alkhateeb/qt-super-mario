@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
 {
 
     QApplication app(argc, argv);
-    bool didFall= false;
 
     QGraphicsScene scene;
     scene.setSceneRect(0, 0, 2000, 400);
@@ -46,7 +45,7 @@ int main(int argc, char *argv[])
     QObject::connect(&timer, &QTimer::timeout, &player, &Player::updateState);
 
     QObject::connect(&timer, &QTimer::timeout, [&view, &player]() { view.centerOn(&player); });
-    QObject::connect(&player,&Player::PlayerLost,[&view](){
+    QObject::connect(&player,&Player::PlayerLost,[&view](){ // &view in the capture(& alone also works) so that the anon function is aware of variables outside of it
         QMessageBox::information(&view,"Message","You lost!");
 
     });
@@ -54,3 +53,4 @@ int main(int argc, char *argv[])
 
     return app.exec();
 }
+
