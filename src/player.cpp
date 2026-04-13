@@ -1,11 +1,21 @@
 #include "player.hpp"
 
+#include <QApplication>
 #include <QBrush>
+#include <QGraphicsScene>
+#include <QMessageBox>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
+    : QObject(),
+      QGraphicsRectItem(parent),
+      velocityY(0),
+      onGround(false),
+      hasLost(false) {
   setRect(0, 0, 30, 60);
   setBrush(Qt::red);
+Player::Player(QGraphicsItem* parent)
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
+  setPixmap(QPixmap("assets/player.png"));
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
@@ -25,17 +35,35 @@ void Player::keyPressEvent(QKeyEvent* event) {
 }
 
 void Player::updateState() {
+  if (hasLost) {
+    return;
+  }
+
+  const qreal previousBottom = sceneBoundingRect().bottom();
+
   velocityY += 1;
   onGround = false;
   moveBy(0, velocityY);
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
+  for (QGraphicsItem* item : items) {
+    const QRectF itemRect = item->sceneBoundingRect();
+    const QRectF playerRect = sceneBoundingRect();
 
-    velocityY = 0;
-    onGround = true;
+    if (velocityY >= 0 &&
+        previousBottom <= itemRect.top() + 5 &&
+        playerRect.bottom() >= itemRect.top()) {
+      setY(itemRect.top() - rect().height());
+      velocityY = 0;
+      onGround = true;
+      break;
+    }
+  }
+
+  if (scene() && sceneBoundingRect().top() > scene()->sceneRect().bottom()) {
+    hasLost = true;
+    QMessageBox::information(nullptr, "Qt Super Mario", "You lost!");
+    QApplication::quit();
   }
 }
