@@ -1,5 +1,7 @@
 #include "player.hpp"
 
+#include <QGraphicsScene>
+#include <QMessageBox>
 #include <QBrush>
 
 Player::Player(QGraphicsItem* parent)
@@ -38,4 +40,9 @@ void Player::updateState() {
     velocityY = 0;
     onGround = true;
   }
+if (y() > scene()->height()) {
+  QMessageBox msgBox;
+  msgBox.setText("You lost!");
+  msgBox.exec();
+}
 }
