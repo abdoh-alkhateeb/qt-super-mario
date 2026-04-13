@@ -1,14 +1,16 @@
 #pragma once
 
-#include <QGraphicsRectItem>
+#include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 #include <QObject>
 
-class Player : public QObject, public QGraphicsRectItem {
+class Player : public QObject, public QGraphicsPixmapItem {
   Q_OBJECT
 
  public:
   Player(QGraphicsItem* parent = nullptr);
+
+  ~Player();
 
  public slots:
   void updateState();
@@ -19,4 +21,5 @@ class Player : public QObject, public QGraphicsRectItem {
  private:
   int velocityY;
   bool onGround;
+  bool dead = false;
 };
