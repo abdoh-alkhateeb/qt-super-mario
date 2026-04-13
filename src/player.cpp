@@ -4,10 +4,11 @@
 Player::Player(QGraphicsItem* parent)
     : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
   setPixmap(QPixmap("assets/player.png"));
-  setPos(300, 0);
+  setPos(400, 0);
 
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFocus();
+    fellbelowBoundary=false;
 }
 
 void Player::keyPressEvent(QKeyEvent *event)
@@ -45,7 +46,7 @@ void Player::updateState()
 void Player::CheckBoundary()
 {
 
-    fellbelowBoundary = false; //initalize and enables the condition again
+
 
         if(this->pos().y()>=400.0&&!fellbelowBoundary)
         {
@@ -53,6 +54,11 @@ void Player::CheckBoundary()
             emit PlayerLost();
 
             this->setPos(40,30); //teleport the player to a platform
+        }
+
+        if ( this->pos().y()<400.0) //enables the condition again
+        {
+            fellbelowBoundary = false;
         }
 
 
