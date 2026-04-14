@@ -3,9 +3,8 @@
 #include <QBrush>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
+  setPixmap(QPixmap("assets/player.png"));
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
@@ -31,11 +30,17 @@ void Player::updateState() {
 
   QList<QGraphicsItem*> items = collidingItems();
 
-  if (items.size() != 0) {
-    QGraphicsItem* item = items[0];
-    setY(item->y() - boundingRect().height());
+  for (QGraphicsItem* item : items) {
+    if (velocityY > 0) { // falling down only
+      setY(item->y() - boundingRect().height());
+      velocityY = 0;
+      onGround = true;
+      break;
+    }
+  }
 
-    velocityY = 0;
-    onGround = true;
+  if (y() > scene()->height()) {
+    QMessageBox::information(nullptr, "Game Over", "You lost!");
+    scene()->removeItem(this);
   }
 }
