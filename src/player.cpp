@@ -1,21 +1,20 @@
 #include "player.hpp"
 
 #include <QApplication>
-#include <QBrush>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QMessageBox>
+#include <QPixmap>
 
 Player::Player(QGraphicsItem* parent)
     : QObject(),
-      QGraphicsRectItem(parent),
+      QGraphicsPixmapItem(parent),
       velocityY(0),
       onGround(false),
       gameOver(false),
       moveLeft(false),
       moveRight(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+  setPixmap(QPixmap("assets/player.png"));
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
