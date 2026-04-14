@@ -1,10 +1,10 @@
 #pragma once
 
-#include <QGraphicsRectItem>
+#include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 #include <QObject>
 
-class Player : public QObject, public QGraphicsRectItem {
+class Player : public QObject, public QGraphicsPixmapItem {
   Q_OBJECT
 
  public:
@@ -15,8 +15,12 @@ class Player : public QObject, public QGraphicsRectItem {
 
  protected:
   void keyPressEvent(QKeyEvent* event) override;
+  void keyReleaseEvent(QKeyEvent* event) override;
 
  private:
   int velocityY;
   bool onGround;
+  bool gameOver;
+  bool moveLeft;
+  bool moveRight;
 };
