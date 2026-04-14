@@ -14,7 +14,7 @@ Player::Player(QGraphicsItem* parent)
       gameOver(false),
       moveLeft(false),
       moveRight(false) {
-  setPixmap(QPixmap("assets/player.png"));
+  setPixmap(QPixmap("../assets/player.png"));
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
