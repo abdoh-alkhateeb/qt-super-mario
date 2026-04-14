@@ -15,8 +15,12 @@ class Player : public QObject, public QGraphicsRectItem {
 
  protected:
   void keyPressEvent(QKeyEvent* event) override;
+  void keyReleaseEvent(QKeyEvent* event) override;
 
  private:
   int velocityY;
   bool onGround;
+  bool gameOver;
+  bool moveLeft;
+  bool moveRight;
 };

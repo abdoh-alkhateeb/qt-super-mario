@@ -1,9 +1,19 @@
 #include "player.hpp"
 
+#include <QApplication>
 #include <QBrush>
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QMessageBox>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
+    : QObject(),
+      QGraphicsRectItem(parent),
+      velocityY(0),
+      onGround(false),
+      gameOver(false),
+      moveLeft(false),
+      moveRight(false) {
   setRect(0, 0, 30, 60);
   setBrush(Qt::red);
   setPos(300, 0);
@@ -13,30 +23,88 @@ Player::Player(QGraphicsItem* parent)
 }
 
 void Player::keyPressEvent(QKeyEvent* event) {
+  if (gameOver) {
+    return;
+  }
+
+  if (event->isAutoRepeat()) {
+    return;
+  }
+
   if (event->key() == Qt::Key_Left) {
-    moveBy(-10, 0);
+    moveLeft = true;
   }
+
   if (event->key() == Qt::Key_Right) {
-    moveBy(10, 0);
+    moveRight = true;
   }
+
   if (event->key() == Qt::Key_Space && onGround) {
-    velocityY = -15;
+    velocityY = -18;
+    onGround = false;
+  }
+}
+
+void Player::keyReleaseEvent(QKeyEvent* event) {
+  if (event->isAutoRepeat()) {
+    return;
+  }
+
+  if (event->key() == Qt::Key_Left) {
+    moveLeft = false;
+  }
+
+  if (event->key() == Qt::Key_Right) {
+    moveRight = false;
   }
 }
 
 void Player::updateState() {
+  if (gameOver || !scene()) {
+    return;
+  }
+
+  if (moveLeft) {
+    moveBy(-7, 0);
+  }
+
+  if (moveRight) {
+    moveBy(7, 0);
+  }
+
+  qreal previousBottom = y() + boundingRect().height();
+
   velocityY += 1;
-  onGround = false;
+  if (velocityY > 16) {
+    velocityY = 16;
+  }
+
   moveBy(0, velocityY);
+  onGround = false;
 
   QList<QGraphicsItem*> items = collidingItems();
 
   for (QGraphicsItem* item : items) {
-    if (velocityY >= 0 && y() + boundingRect().height() >= item->y()) {
-      setY(item->y() - boundingRect().height());
+    qreal itemTop = item->sceneBoundingRect().top();
+    qreal currentBottom = y() + boundingRect().height();
+
+    if (velocityY >= 0 && previousBottom <= itemTop && currentBottom >= itemTop) {
+      setY(itemTop - boundingRect().height());
       velocityY = 0;
       onGround = true;
       break;
     }
+  }
+
+  if (y() > scene()->sceneRect().bottom()) {
+    gameOver = true;
+
+    QWidget* parentWidget = nullptr;
+    if (!scene()->views().isEmpty()) {
+      parentWidget = scene()->views().first();
+    }
+
+    QMessageBox::information(parentWidget, "Game Over", "You lost!");
+    QApplication::quit();
   }
 }
