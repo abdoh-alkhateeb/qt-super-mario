@@ -1,11 +1,13 @@
 #include "player.hpp"
-
+<<<<<<< HEAD
+#include <QMessageBox>
 #include <QBrush>
+=======
+>>>>>>> origin/feature/add-player-image
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
-  setRect(0, 0, 30, 60);
-  setBrush(Qt::red);
+    : QObject(), QGraphicsPixmapItem(parent), velocityY(0), onGround(false) {
+  setPixmap(QPixmap("assets/player.png"));
   setPos(300, 0);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
@@ -28,6 +30,14 @@ void Player::updateState() {
   velocityY += 1;
   onGround = false;
   moveBy(0, velocityY);
+
+  if (y() > 400) {
+	QMessageBox *messageBox = new QMessageBox;
+	messageBox->setText("You lost!");
+	messageBox->exec();
+	setPos(300, 0);
+	delete messageBox;
+  }
 
   QList<QGraphicsItem*> items = collidingItems();
 
